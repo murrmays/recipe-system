@@ -1,0 +1,13 @@
+<div class="alert-overlay" (click)="close.emit()">
+  <div class="alert-card" (click)="$event.stopPropagation()" [class]="type()">
+    <p>{{ message() }}</p>
+    <div class="btn-container">
+      @if (type() === 'warn') {
+        <button class="alert-btn" (click)="handleConfirm(false)">Отмена</button>
+      }
+      <button class="alert-btn" (click)="handleConfirm(true)">
+        {{ type() === 'warn' ? 'Да' : 'Хорошо' }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+<div class="page-wrapper">
+  @if (alertData(); as data) {
+    <app-alert-modal
+      [type]="data.type"
+      [message]="data.msg"
+      (close)="alertData.set(null)"
+      (isConfirmed)="handleConfirm($event)"
+    >
+    </app-alert-modal>
+  }
+  @if (isModalOpen()) {
+    <div class="modal-overlay" (click)="closeModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <app-product-creation-form
+          [initialData]="productToEdit()"
+          (formSubmit)="handleFormSubmit($event)"
+          (close)="closeModal()"
+        >
+        </app-product-creation-form>
+      </div>
+    </div>
+  }
+  <div class="product-card">
+    @if (productInfo(); as product) {
+      <div class="image-carousel">
+        @if (displayPhotos().length > 0) {
+          @for (photo of displayPhotos(); track $index) {
+            <img [src]="displayPhotos()[$index]" class="carousel-img" alt="фото" />
+          }
+        } @else {
+          <div class="image-placeholder">
+            <span>Нет фото</span>
+          </div>
+        }
+      </div>
+      <div class="product-info">
+        <div class="product-header">
+          <h3>{{ product.name }}</h3>
+          <span class="badge calories">{{ product.calories }} кк</span>
+        </div>
+        <div class="nutrition-info">
+          <span class="n-badge proteins">Б: {{ product.proteins }}г</span>
+          <span class="n-badge fats">Ж: {{ product.fats }}г</span>
+          <span class="n-badge carbs">У: {{ product.carbs }}г</span>
+        </div>
+        @if (product.ingredients) {
+          <div class="product-description">
+            <span>{{ product.ingredients }}</span>
+          </div>
+        }
+        <div class="additional-info">
+          <span>{{ product.category }}</span>
+          <span>{{ product.readiness }}</span>
+        </div>
+        <div class="flags-container">
+          @for (flag of product.flags; track flag) {
+            <span class="n-badge flag">{{ flag }}</span>
+          }
+        </div>
+        <div class="additional-info">
+          <span>{{ product.creationDate | date: 'dd.MM.yyyy' }}</span>
+          @if (product.editDate) {
+            <span>Обновлен: {{ product.editDate | date: 'dd.MM.yyyy' }}</span>
+          }
+        </div>
+        <div class="controls-section">
+          <button class="edit-btn" (click)="handleEdit()">
+            <lucide-icon name="pencil" size="20"></lucide-icon>
+          </button>
+          <button class="delete-btn" (click)="requestDelete()">
+            <lucide-icon name="trash" size="20"></lucide-icon>
+          </button>
+        </div>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <p>Ничего не найдено</p>
+      </div>
+    }
+  </div>
+</div>

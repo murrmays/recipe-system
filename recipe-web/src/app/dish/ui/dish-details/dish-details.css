@@ -1,0 +1,196 @@
+.dish-card {
+  display: grid;
+  grid-template-columns: 450px 1fr;
+  gap: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.image-carousel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background: transparent;
+}
+
+.carousel-img {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.image-placeholder {
+  height: 400px;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: #888;
+}
+
+.dish-info {
+  position: sticky;
+  top: 40px;
+  height: fit-content;
+}
+
+.dish-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.badge.calories {
+  text-align: center;
+  padding: 12px 40px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.controls-section {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+ingredient-section {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 12px;
+  margin-top: 12px;
+}
+.ingredient-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.ingredient-header .title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.ingredient-list {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ingredient-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 13px;
+  color: #64748b;
+}
+.ing-name {
+  flex-shrink: 0;
+}
+.ing-dots {
+  flex-grow: 1;
+  border-bottom: 1px dotted #e2e8f0;
+  margin: 0 8px 4px 8px;
+}
+.ing-weight {
+  flex-shrink: 0;
+  font-weight: 500;
+  color: #334155;
+}
+
+.edit-btn,
+.delete-btn {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: white;
+  display: flex;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.edit-btn:hover {
+  border-color: #1890ff;
+  color: #1890ff;
+}
+.delete-btn:hover {
+  border-color: #ff4d4f;
+  color: #ff4d4f;
+}
+
+.dish-header h3 {
+  font-size: 32px;
+  margin: 0 0 10px 0;
+  line-height: 1.2;
+}
+
+.nutrition-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 24px 0;
+}
+
+.n-badge {
+  text-align: center;
+  padding: 12px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.proteins {
+  background: #e6f7ff;
+  color: #0050b3;
+}
+.fats {
+  background: #fff1f0;
+  color: #a8071a;
+}
+.carbs {
+  background: #f6ffed;
+  color: #237804;
+}
+
+.dish-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.flags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.additional-info {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  color: #999;
+  font-size: 13px;
+  margin-top: 15px;
+}
+
+@media (max-width: 900px) {
+  .dish-card {
+    grid-template-columns: 1fr;
+  }
+  .dish-info {
+    position: static;
+  }
+}

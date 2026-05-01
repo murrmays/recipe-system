@@ -1,0 +1,51 @@
+<div class="product-card" (click)="handleNavigate()">
+  <div class="image-carousel">
+    @if (displayPhotos().length > 0) {
+      <img [src]="displayPhotos()[currentImage()]" class="carousel-img" alt="фото" />
+
+      @if (productInfo().photos!.length > 1) {
+        <button class="nav-btn prev" (click)="prevImage($event)">‹</button>
+        <button class="nav-btn next" (click)="nextImage($event)">›</button>
+
+        <div class="indicators">
+          @for (photo of productInfo().photos; track $index) {
+            <div class="dot" [class.active]="$index === currentImage()"></div>
+          }
+        </div>
+      }
+    } @else {
+      <div class="image-placeholder">
+        <span>Нет фото</span>
+      </div>
+    }
+  </div>
+  <div class="product-info">
+    <div class="controls-section">
+      <button class="edit-btn" (click)="handleEdit($event, productInfo().id)">
+        <lucide-icon name="pencil" size="20"></lucide-icon>
+      </button>
+      <button class="delete-btn" (click)="handleDelete($event, productInfo().id)">
+        <lucide-icon name="trash" size="20"></lucide-icon>
+      </button>
+    </div>
+    <div class="product-header">
+      <h3>{{ productInfo().name }}</h3>
+      <span class="badge calories">{{ productInfo().calories }} кк</span>
+    </div>
+    <div class="nutrition-info">
+      <span class="n-badge proteins">Б: {{ productInfo().proteins }}г</span>
+      <span class="n-badge fats">Ж: {{ productInfo().fats }}г</span>
+      <span class="n-badge carbs">У: {{ productInfo().carbs }}г</span>
+    </div>
+    @if (productInfo().ingredients) {
+      <div class="product-description">
+        <span>{{ productInfo().ingredients }}</span>
+      </div>
+    }
+    <div class="flags-container">
+      @for (flag of productInfo().flags; track flag) {
+        <span class="n-badge flag">{{ flag }}</span>
+      }
+    </div>
+  </div>
+</div>

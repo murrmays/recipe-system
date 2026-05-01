@@ -1,0 +1,66 @@
+<div class="dish-card" (click)="handleNavigate()">
+  <div class="image-carousel">
+    @if (displayPhotos().length > 0) {
+      <img [src]="displayPhotos()[currentImage()]" class="carousel-img" alt="фото" />
+
+      @if (dishInfo().photos!.length > 1) {
+        <button class="nav-btn prev" (click)="prevImage($event)">‹</button>
+        <button class="nav-btn next" (click)="nextImage($event)">›</button>
+
+        <div class="indicators">
+          @for (photo of dishInfo().photos; track $index) {
+            <div class="dot" [class.active]="$index === currentImage()"></div>
+          }
+        </div>
+      }
+    } @else {
+      <div class="image-placeholder">
+        <span>Нет фото</span>
+      </div>
+    }
+  </div>
+  <div class="dish-info">
+    <div class="controls-section">
+      <button class="edit-btn" (click)="handleEdit($event, dishInfo().id)">
+        <lucide-icon name="pencil" size="20"></lucide-icon>
+      </button>
+      <button class="delete-btn" (click)="handleDelete($event, dishInfo().id)">
+        <lucide-icon name="trash" size="20"></lucide-icon>
+      </button>
+    </div>
+    <div class="dish-header">
+      <h3>{{ dishInfo().name }}</h3>
+      <span class="badge calories">{{ dishInfo().calories }} кк</span>
+    </div>
+    <div class="nutrition-info">
+      <span class="n-badge proteins">Б: {{ dishInfo().proteins }}г</span>
+      <span class="n-badge fats">Ж: {{ dishInfo().fats }}г</span>
+      <span class="n-badge carbs">У: {{ dishInfo().carbs }}г</span>
+    </div>
+    <div class="ingredient-section">
+      <div class="ingredient-header" (click)="toggleIngredients($event)">
+        <span class="title">Состав</span>
+        <button class="toggle-ingredients-btn" [class.rotated]="isExpanded()">
+          <lucide-icon name="chevron-down" size="16"></lucide-icon>
+        </button>
+      </div>
+
+      <div class="expandable-container" [class.open]="isExpanded()">
+        <div class="ingredient-list">
+          @for (ing of dishInfo().ingredients; track ing.product.id) {
+            <div class="ingredient-item">
+              <span class="ing-name">{{ ing.product.name }}</span>
+              <span class="ing-dots"></span>
+              <span class="ing-weight">{{ ing.amount }} г.</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="flags-container">
+      @for (flag of dishInfo().flags; track flag) {
+        <span class="n-badge flag">{{ flag }}</span>
+      }
+    </div>
+  </div>
+</div>

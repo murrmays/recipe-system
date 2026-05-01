@@ -1,0 +1,55 @@
+<form [formGroup]="filtersForm" class="filters-form">
+  <div class="row">
+    <div class="form-group">
+      <label>Категории</label>
+      <div class="chips-container">
+        @for (cat of categoryOptions; track cat) {
+          <label class="chip">
+            <input type="checkbox" [value]="cat" (change)="toggleCategory(cat)" />
+            <span class="chip-label">{{ cat }}</span>
+          </label>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="centered-row">
+    <div class="form-group">
+      <label>Аллергии и предпочтения</label>
+      <div class="chips-container">
+        @for (flag of flagOptions; track flag) {
+          <label class="chip">
+            <input type="checkbox" [value]="flag" (change)="toggleFlag(flag)" />
+            <span class="chip-label">{{ flag }}</span>
+          </label>
+        }
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Готовность</label>
+      <div class="chips-container">
+        @for (readiness of readinessOptions; track readiness) {
+          <label class="chip">
+            <input type="checkbox" [value]="readiness" (change)="toggleReadiness(readiness)" />
+            <span class="chip-label">{{ readiness }}</span>
+          </label>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group">
+      <label>Поиск</label>
+      <input type="text" placeholder="Введите название или описание" formControlName="search"/>
+    </div>
+    <div class="form-group">
+      <label>Сортировка</label>
+      <select formControlName="sort">
+        @for (s of sortOptions; track s[0]) {
+          <option [value]="s[0]">{{ s[1] }}</option>
+        } @empty {
+          <option disabled>Нет доступных вариантов</option>
+        }
+      </select>
+    </div>
+  </div>
+</form>

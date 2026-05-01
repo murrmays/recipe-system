@@ -1,0 +1,90 @@
+<div class="page-wrapper">
+  @if (alertData(); as data) {
+    <app-alert-modal
+      [type]="data.type"
+      [message]="data.msg"
+      (close)="alertData.set(null)"
+      (isConfirmed)="handleConfirm($event)"
+    ></app-alert-modal>
+  }
+  @if (isModalOpen()) {
+    <div class="modal-overlay" (click)="closeModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <app-dish-creation-form
+          [initialData]="dishToEdit()"
+          [productOptions]="productService.state()"
+          (formSubmit)="handleFormSubmit($event)"
+          (close)="closeModal()"
+        >
+        </app-dish-creation-form>
+      </div>
+    </div>
+  }
+  <div class="dish-card">
+    <div class="image-carousel">
+      @if (displayPhotos().length > 0) {
+        @for (photo of displayPhotos(); track $index) {
+          <img [src]="displayPhotos()[$index]" class="carousel-img" alt="фото" />
+        }
+      } @else {
+        <div class="image-placeholder">
+          <span>Нет фото</span>
+        </div>
+      }
+    </div>
+    @if (dishInfo(); as dish) {
+      <div class="dish-info">
+        <div class="dish-header">
+          <h3>{{ dish.name }}</h3>
+          <span class="badge calories">{{ dish.calories }} кк</span>
+        </div>
+        <div class="nutrition-info">
+          <span class="n-badge proteins">Б: {{ dish.proteins }}г</span>
+          <span class="n-badge fats">Ж: {{ dish.fats }}г</span>
+          <span class="n-badge carbs">У: {{ dish.carbs }}г</span>
+        </div>
+        <div class="ingredient-section">
+          <div class="ingredient-header">
+            <span class="title">Состав</span>
+          </div>
+          <div class="ingredient-list">
+            @for (ing of dish.ingredients; track ing.product.id) {
+              <div class="ingredient-item">
+                <span class="ing-name">{{ ing.product.name }}</span>
+                <span class="ing-dots"></span>
+                <span class="ing-weight">{{ ing.amount }} г.</span>
+              </div>
+            }
+          </div>
+        </div>
+        <div class="additional-info">
+          <span>{{ dish.category }}</span>
+          <span>Вес порции: {{ dish.portionSize }} г.</span>
+        </div>
+        <div class="flags-container">
+          @for (flag of dish.flags; track flag) {
+            <span class="n-badge flag">{{ flag }}</span>
+          }
+        </div>
+        <div class="additional-info">
+          <span>{{ dish.creationDate | date: 'dd.MM.yyyy' }}</span>
+          @if (dish.editDate) {
+            <span>Обновлен: {{ dish.editDate | date: 'dd.MM.yyyy' }}</span>
+          }
+        </div>
+        <div class="controls-section">
+          <button class="edit-btn" (click)="handleEdit(dish.id)">
+            <lucide-icon name="pencil" size="20"></lucide-icon>
+          </button>
+          <button class="delete-btn" (click)="requestDelete(dish.id)">
+            <lucide-icon name="trash" size="20"></lucide-icon>
+          </button>
+        </div>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <p>Ничего не найдено</p>
+      </div>
+    }
+  </div>
+</div>

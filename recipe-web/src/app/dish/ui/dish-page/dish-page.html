@@ -1,0 +1,51 @@
+<div class="page-wrapper">
+  <header class="page-header">
+    <h1>Список блюд</h1>
+    <button class="add-dish-btn" (click)="openModal()">Добавить</button>
+  </header>
+  @if (alertData(); as data) {
+    <app-alert-modal
+      [type]="data.type"
+      [message]="data.msg"
+      (close)="alertData.set(null)"
+      (isConfirmed)="handleConfirm($event)"
+    ></app-alert-modal>
+  }
+  @if (isModalOpen()) {
+    <div class="modal-overlay" (click)="closeModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <app-dish-creation-form
+          [initialData]="dishToEdit()"
+          [productOptions]="productService.state()"
+          (formSubmit)="handleFormSubmit($event)"
+          (close)="closeModal()"
+        >
+        </app-dish-creation-form>
+      </div>
+    </div>
+  }
+  <main class="dish-layout">
+    <section class="filters-section">
+      <app-dish-filter-card (filterChange)="handleFiltersUpdate($event)"></app-dish-filter-card>
+    </section>
+    <section class="dish-list">
+      @if (state.isLoading()) {
+        <div class="spinner"></div>
+      } @else {
+        @if (state.state().length > 0) {
+          @for (dish of state.state(); track dish.id) {
+            <app-dish-row
+              [dishInfo]="dish"
+              (isEditing)="handleEdit($event)"
+              (isDeleting)="requestDelete($event)"
+            ></app-dish-row>
+          }
+        } @else {
+          <div class="empty-state">
+            <p>Ничего не найдено</p>
+          </div>
+        }
+      }
+    </section>
+  </main>
+</div>

@@ -1,0 +1,130 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="dish-form">
+  <div class="form-group">
+    <div class="top-row">
+      <label>Название</label>
+      <button type="button" class="close-btn" (click)="onClose()">
+        <lucide-icon name="X"></lucide-icon>
+      </button>
+    </div>
+    <input type="text" formControlName="name" />
+    <app-form-error [control]="form.controls.name"></app-form-error>
+  </div>
+  <div class="row">
+    <div class="form-group">
+      <label>Калорийность (на 100 г)</label>
+      <input type="number" formControlName="calories" />
+      <app-form-error [control]="form.controls.calories"></app-form-error>
+    </div>
+    <div class="form-group">
+      <label>Размер порции (г)</label>
+      <input type="number" formControlName="portionSize" />
+      <app-form-error [control]="form.controls.portionSize"></app-form-error>
+    </div>
+  </div>
+  <div class="nutrients-row">
+    <div class="form-group">
+      <label>Белки (на 100 г)</label>
+      <input type="number" formControlName="proteins" />
+      <app-form-error [control]="form.controls.proteins"></app-form-error>
+    </div>
+    <div class="form-group">
+      <label>Жиры (на 100 г)</label>
+      <input type="number" formControlName="fats" />
+      <app-form-error [control]="form.controls.fats"></app-form-error>
+    </div>
+    <div class="form-group">
+      <label>Углеводы (на 100 г)</label>
+      <input type="number" formControlName="carbs" />
+      <app-form-error [control]="form.controls.carbs"></app-form-error>
+    </div>
+  </div>
+  <app-form-error [control]="form"></app-form-error>
+  <div class="form-group" formArrayName="ingredients">
+    <label>Состав</label>
+    @for (ingGroup of ingredientsArray.controls; track $index) {
+      <div [formGroupName]="$index" class="ingredient-row">
+        <select formControlName="product" class="product-select" [compareWith]="compareProducts">
+          <option [ngValue]="null" disabled>Выберите продукт</option>
+          @for (p of productOptions(); track p.id) {
+            <option [ngValue]="p">{{ p.name }} ({{ p.calories }} кк.)</option>
+          } @empty {
+            <option disabled>Продуктов пока нет</option>
+          }
+        </select>
+
+        @if (ingGroup.get('product')?.value) {
+          <div class="quantity-wrapper">
+            <input type="number" formControlName="amount" placeholder="гр." />
+            <span>г</span>
+          </div>
+
+          <button type="button" class="remove-btn" (click)="removeIngredient($index)">×</button>
+        }
+      </div>
+    }
+    <button type="button" class="add-ing-btn" (click)="addIngredient()">+ Добавить продукт</button>
+  </div>
+  <div class="form-group">
+    <label>Категория</label>
+    <select formControlName="category">
+      <option value="">Выберите категорию</option>
+      @for (cat of categoryOptions; track cat) {
+        <option [value]="cat">{{ cat }}</option>
+      } @empty {
+        <option disabled>Нет доступных категорий</option>
+      }
+    </select>
+    <app-form-error [control]="form.controls.category"></app-form-error>
+  </div>
+  <div class="form-group">
+    <label>Аллергии и предпочтения</label>
+    <div class="chips-container">
+      @for (flag of flagOptions; track flag) {
+        <label class="chip">
+          <input
+            type="checkbox"
+            [value]="flag"
+            (change)="toggleFlag(flag)"
+            [checked]="form.controls.flags.value.includes(flag)"
+          />
+          <span class="chip-label">{{ flag }}</span>
+        </label>
+      }
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Фотографии блюда (макс. 5)</label>
+
+    <div
+      class="dropzone"
+      (click)="fileInput.click()"
+      (dragover)="onDragOver($event)"
+      (drop)="onDrop($event)"
+    >
+      <input
+        type="file"
+        #fileInput
+        (change)="onFileSelected($event)"
+        multiple
+        accept="image/*"
+        hidden
+      />
+
+      <div class="dropzone-content">
+        <p>Нажмите или перетащите фото сюда</p>
+      </div>
+    </div>
+
+    <div class="photos-preview">
+      @for (photo of form.controls.photos.value; track $index) {
+        <div class="preview-item">
+          <img [src]="getPhotoPreview(photo)" alt="preview" />
+          <button type="button" class="remove-photo" (click)="removePhoto($index)">
+            <lucide-icon name="X"></lucide-icon>
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+  <button class="submit-btn" [disabled]="!form.valid">Создать</button>
+</form>
