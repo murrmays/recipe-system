@@ -41,9 +41,9 @@
 }
 
 .add-dish-btn {
-  background: var(--primary-green);
-  color: white;
-  border: none;
+  background: var(--light-matcha);
+  color: var(--dark-green);
+  border: 1px solid var(--dark-green);
   padding: 8px 16px;
   border-radius: 6px;
   font-weight: 600;
@@ -52,7 +52,9 @@
 }
 
 .add-dish-btn:hover {
-  background: var(--dark-green);
+  background: var(--primary-green);
+  border: 1px solid var(--primary-green);
+  color: white;
 }
 
 .spinner {

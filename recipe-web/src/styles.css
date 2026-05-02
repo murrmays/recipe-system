@@ -2,14 +2,19 @@
   font-family: 'Inter', system-ui, sans-serif;
   --primary-green: #a3c5a0;
   --dark-green: #5a7c55;
-  --light-matcha: #e8f3e9;
+  --light-matcha: #fcfcfb;
   --strawberry-pink: #f7cac9;
   --strawberry-soft: #fff0f0;
-  --bg-color: #f9fbf9;
+  --bg-color: #fff5f5;
   --card-bg: #ffffff;
   --border-color: #e2ede3;
-  --text-main: #2d3436;
-  --text-accent: #3e5a3f;
+  --text-main: #052209;
+  --text-accent: #2d412d;
+}
+
+body {
+  padding: 0;
+  margin: 0;
 }
 
 .modal-overlay {

@@ -29,8 +29,11 @@
       </button>
     </div>
     <div class="dish-header">
-      <h3>{{ dishInfo().name }}</h3>
+      <span class="dish-title">{{ dishInfo().name }}</span>
       <span class="badge calories">{{ dishInfo().calories }} кк</span>
+    </div>
+    <div class="additional-info">
+      <span>{{ dishInfo().category }}</span>
     </div>
     <div class="nutrition-info">
       <span class="n-badge proteins">Б: {{ dishInfo().proteins }}г</span>

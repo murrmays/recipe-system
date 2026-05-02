@@ -4,7 +4,12 @@
   gap: 16px;
   align-items: flex-end;
 }
-
+.row{
+  margin-bottom: auto;
+}
+.row label{
+  margin-bottom: 12px;
+}
 .centered-row {
   height: 100%;
 }

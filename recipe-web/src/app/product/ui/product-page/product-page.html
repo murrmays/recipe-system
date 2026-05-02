@@ -1,48 +1,55 @@
-<div class="page-wrapper">
-  <header class="page-header">
-    <h1>Список продуктов</h1>
-    <button class="add-product-btn" (click)="openModal()">Добавить</button>
-  </header>
-  @if (alertData(); as data) {
-    <app-alert-modal [type]="data.type" [message]="data.msg" (close)="alertData.set(null)" (isConfirmed)="handleConfirm($event)">
-    </app-alert-modal>
-  }
-  @if (isModalOpen()) {
-    <div class="modal-overlay" (click)="closeModal()">
-      <div class="modal-content" (click)="$event.stopPropagation()">
-        <app-product-creation-form
-          [initialData]="productToEdit()"
-          (formSubmit)="handleFormSubmit($event)"
-          (close)="closeModal()"
-        >
-        </app-product-creation-form>
+<div class="page-root">
+  <div class="page-wrapper">
+    <header class="page-header">
+      <h1>Список продуктов</h1>
+      <button class="add-product-btn" (click)="openModal()">Добавить</button>
+    </header>
+    @if (alertData(); as data) {
+      <app-alert-modal
+        [type]="data.type"
+        [message]="data.msg"
+        (close)="alertData.set(null)"
+        (isConfirmed)="handleConfirm($event)"
+      >
+      </app-alert-modal>
+    }
+    @if (isModalOpen()) {
+      <div class="modal-overlay" (click)="closeModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <app-product-creation-form
+            [initialData]="productToEdit()"
+            (formSubmit)="handleFormSubmit($event)"
+            (close)="closeModal()"
+          >
+          </app-product-creation-form>
+        </div>
       </div>
-    </div>
-  }
-  <main class="products-layout">
-    <section class="filters-section">
-      <app-product-filter-card
-        (filterChange)="handleFiltersUpdate($event)"
-      ></app-product-filter-card>
-    </section>
-    <section class="product-list">
-      @if (state.isLoading()) {
-        <div class="spinner"></div>
-      } @else {
-        @if (state.state().length > 0) {
-          @for (prod of state.state(); track prod.id) {
-            <app-product-row
-              [productInfo]="prod"
-              (isEditing)="handleEdit($event)"
-              (isDeleting)="requestDelete($event)"
-            ></app-product-row>
-          }
+    }
+    <main class="products-layout">
+      <section class="filters-section">
+        <app-product-filter-card
+          (filterChange)="handleFiltersUpdate($event)"
+        ></app-product-filter-card>
+      </section>
+      <section class="product-list">
+        @if (state.isLoading()) {
+          <div class="spinner"></div>
         } @else {
-          <div class="empty-state">
-            <p>Ничего не найдено</p>
-          </div>
+          @if (state.state().length > 0) {
+            @for (prod of state.state(); track prod.id) {
+              <app-product-row
+                [productInfo]="prod"
+                (isEditing)="handleEdit($event)"
+                (isDeleting)="requestDelete($event)"
+              ></app-product-row>
+            }
+          } @else {
+            <div class="empty-state">
+              <p>Ничего не найдено</p>
+            </div>
+          }
         }
-      }
-    </section>
-  </main>
+      </section>
+    </main>
+  </div>
 </div>

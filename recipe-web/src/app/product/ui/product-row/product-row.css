@@ -1,7 +1,7 @@
 .product-card {
   width: 300px;
   border-radius: 16px;
-  background: #ffffff;
+  background: white;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   transition: transform 0.2s ease;
@@ -9,7 +9,7 @@
   cursor: pointer;
 }
 
-.product-card:hover{
+.product-card:hover {
   transform: translateY(-2px);
 }
 .product-info {
@@ -68,12 +68,15 @@
 }
 
 .nutrition-info {
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 12px;
   display: flex;
   gap: 8px;
   margin-bottom: 12px;
 }
 .additional-info {
   font-size: 0.8rem;
+  color: #64748b;
   margin-bottom: 12px;
   margin-top: 8px;
   display: flex;
@@ -91,6 +94,8 @@
 }
 
 .flags-container {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 12px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -111,8 +116,7 @@
   display: flex;
   flex-direction: row;
   justify-content: end;
-  margin: 0;
-  padding: 0;
+  margin-bottom: 10px;
 }
 .edit-btn,
 .delete-btn {

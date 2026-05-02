@@ -1,6 +1,12 @@
 <form [formGroup]="filtersForm" class="filters-form">
   <div class="row">
     <div class="form-group">
+      <label>Поиск</label>
+      <input type="text" placeholder="Введите название" formControlName="search"/>
+    </div>
+  </div>
+  <div class="centered-row">
+    <div class="form-group">
       <label>Категории</label>
       <div class="chips-container">
         @for (cat of categoryOptions; track cat) {
@@ -23,12 +29,6 @@
           </label>
         }
       </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="form-group">
-      <label>Поиск</label>
-      <input type="text" placeholder="Введите название" formControlName="search"/>
     </div>
   </div>
 </form>

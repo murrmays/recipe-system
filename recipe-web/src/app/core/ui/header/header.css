@@ -3,7 +3,7 @@
 }
 
 .main-header {
-  background: var(--card-bg);
+  background: var(--light-matcha);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-color);
   padding: 0 1.5rem;
@@ -34,7 +34,7 @@
 .logo {
   font-size: 1.5rem;
   font-weight: 800;
-  color: var(--dark-pink);
+  color: var(--text-main);
   letter-spacing: -0.03em;
   display: flex;
   align-items: center;
@@ -46,6 +46,6 @@
 }
 
 .active-link {
-  color: var(--dark-pink) !important;
+  color: var(--text-accent) !important;
   border-bottom-color: var(--dark-pink) !important;
 }

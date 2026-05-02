@@ -29,7 +29,7 @@
       </button>
     </div>
     <div class="product-header">
-      <h3>{{ productInfo().name }}</h3>
+      <span class="product-title">{{ productInfo().name }}</span>
       <span class="badge calories">{{ productInfo().calories }} кк</span>
     </div>
     <div class="nutrition-info">
@@ -42,6 +42,10 @@
         <span>{{ productInfo().ingredients }}</span>
       </div>
     }
+    <div class="additional-info">
+      <span>{{productInfo().category}}</span>
+      <span>{{productInfo().readiness}}</span>
+    </div>
     <div class="flags-container">
       @for (flag of productInfo().flags; track flag) {
         <span class="n-badge flag">{{ flag }}</span>

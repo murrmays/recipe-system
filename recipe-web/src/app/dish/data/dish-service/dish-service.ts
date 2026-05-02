@@ -77,7 +77,7 @@ export class DishService {
       type: 'application/json',
     });
     formData.append('dto', jsonBlob);
-    
+
     newPhotoFiles?.forEach((photo: any) => {
       const fileToUpload = photo.file ? photo.file : photo;
       formData.append('files', fileToUpload);
@@ -89,17 +89,26 @@ export class DishService {
   }
 
   countNutritionValue(ingredients: DishIngredient[], portionSize: number): NutritionValue {
-    return ingredients.reduce(
+    const result = ingredients.reduce(
       (acc, curr) => {
         const ratio = curr.amount / 100;
+        const portionRatio = portionSize / 100;
+
         return {
-          calories: Math.floor(acc.calories + curr.product.calories * ratio * portionSize / 100),
-          proteins: Math.floor(acc.proteins + curr.product.proteins * ratio),
-          fats: Math.floor(acc.fats + curr.product.fats * ratio),
-          carbs: Math.floor(acc.carbs + curr.product.carbs * ratio),
+          calories: acc.calories + curr.product.calories * ratio * portionRatio,
+          proteins: acc.proteins + curr.product.proteins * ratio,
+          fats: acc.fats + curr.product.fats * ratio,
+          carbs: acc.carbs + curr.product.carbs * ratio,
         };
       },
       { calories: 0, proteins: 0, fats: 0, carbs: 0 },
     );
+
+    return {
+      calories: Math.round(result.calories * 10) / 10,
+      proteins: Math.round(result.proteins * 10) / 10,
+      fats: Math.round(result.fats * 10) / 10,
+      carbs: Math.round(result.carbs * 10) / 10,
+    };
   }
 }

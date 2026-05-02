@@ -22,7 +22,7 @@
   }
   <div class="product-card">
     @if (productInfo(); as product) {
-      <div class="image-carousel">
+      <div class="image-carousel" [class.single-photo]="displayPhotos().length <= 1">
         @if (displayPhotos().length > 0) {
           @for (photo of displayPhotos(); track $index) {
             <img [src]="displayPhotos()[$index]" class="carousel-img" alt="фото" />
