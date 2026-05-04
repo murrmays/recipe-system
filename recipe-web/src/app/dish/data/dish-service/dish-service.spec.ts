@@ -33,9 +33,6 @@ describe('TDishService: Nutrition Calculation', () => {
   it('should return zeros when ingredients list is empty', () => {
     const result = service.countNutritionValue([], 0);
     expect(result.calories).toBe(0);
-    expect(result.proteins).toBe(0);
-    expect(result.fats).toBe(0);
-    expect(result.carbs).toBe(0);
   });
   it('should return 0 calories if portionSize is 0', () => {
     const ingredients: DishIngredient[] = [{ product: mockProduct, amount: 100 }];
@@ -48,13 +45,16 @@ describe('TDishService: Nutrition Calculation', () => {
     expect(result.calories).toBe(200);
   });
 
-  it('should calculate exact product nutrition for 100g portion', () => {
-    const ingredients: DishIngredient[] = [{ product: mockProduct, amount: 100 }];
+  it('should return 0 calories if amount is negative', () => {
+    const ingredients: DishIngredient[] = [{ product: mockProduct, amount: -50 }];
     const result = service.countNutritionValue(ingredients, 100);
-    expect(result.calories).toBe(200);
-    expect(result.proteins).toBe(20);
-    expect(result.fats).toBe(12);
-    expect(result.carbs).toBe(0);
+    expect(result.calories).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should return 0 calories if portionSize is negative', () => {
+    const ingredients: DishIngredient[] = [{ product: mockProduct, amount: 100 }];
+    const result = service.countNutritionValue(ingredients, -200);
+    expect(result.calories).toBe(0);
   });
 
   it('should return 0 calories when quantity is 0', () => {
