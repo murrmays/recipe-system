@@ -1,7 +1,7 @@
 import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DishDraft, DishIngredient } from '../../models/dish';
-import { DishCategory, DishCategoryList } from '../../models/dish-category';
+import { DishCategory, DishCategoryList, MACRO_MAP } from '../../models/dish-category';
 import { Flag, FlagsList } from '../../../core/models/flags';
 import { LucideAngularModule } from 'lucide-angular';
 import { Product } from '../../../product/models/product';
@@ -29,6 +29,7 @@ export class DishCreationForm {
   productOptions = input<Product[]>([]);
   categoryOptions = DishCategoryList;
   flagOptions = FlagsList;
+  macroMap = MACRO_MAP;
   photoPreviews: (File | string)[] = [];
 
   form = this.formBuilder.nonNullable.group(
@@ -49,6 +50,7 @@ export class DishCreationForm {
 
   constructor() {
     this.calculateNutrition();
+    this.listenToNameMacro();
     effect(() => {
       const data = this.initialData();
       if (data) {
@@ -192,5 +194,28 @@ export class DishCreationForm {
     event.preventDefault();
     event.stopPropagation();
     this.onFileSelected(event);
+  }
+
+  listenToNameMacro() {
+    this.form.controls.name.valueChanges
+      .pipe(takeUntilDestroyed(), debounceTime(400))
+      .subscribe((rawName) => {
+        if (!rawName) return;
+
+        let firstCategory: any = null;
+        let earliestIndex = Number.MAX_VALUE;
+        const lowerRawName = rawName.toLowerCase();
+
+        for (const [macro, category] of Object.entries(MACRO_MAP)) {
+          const index = lowerRawName.indexOf(macro);
+          if (index !== -1 && index < earliestIndex) {
+            earliestIndex = index;
+            firstCategory = category;
+          }
+        }
+        if (firstCategory) {
+          this.form.patchValue({ category: firstCategory }, { emitEvent: false });
+        }
+      });
   }
 }

@@ -115,15 +115,33 @@ public class DishService {
 
     private ParsedName parseNameAndCategory(String rawName) {
         if (rawName == null) return new ParsedName("", null);
+        DishCategory firstCategory = null;
+        int earliestIndex = Integer.MAX_VALUE;
 
         for (DishCategory cat : DishCategory.values()) {
-            if (rawName.contains(cat.getMacro())) {
-                String cleanName = rawName.replace(cat.getMacro(), "").replaceAll("\\s+", " ").trim();
-                return new ParsedName(cleanName, cat);
+            if (cat.getMacro() != null && !cat.getMacro().isEmpty()) {
+                int index = rawName.indexOf(cat.getMacro());
+                if (index != -1 && index < earliestIndex) {
+                    earliestIndex = index;
+                    firstCategory = cat;
+                }
             }
         }
-        return new ParsedName(rawName.trim(), null);
+        if (firstCategory == null) {
+            return new ParsedName(rawName.replaceAll("\\s+", " ").trim(), null);
+        }
+
+        String cleanName = rawName;
+        for (DishCategory cat : DishCategory.values()) {
+            if (cat != firstCategory && cat.getMacro() != null && !cat.getMacro().isEmpty()) {
+                cleanName = cleanName.replace(cat.getMacro(), "");
+            }
+        }
+        cleanName = cleanName.replace(firstCategory.getMacro(), "");
+        cleanName = cleanName.replaceAll("\\s+", " ").trim();
+        return new ParsedName(cleanName, firstCategory);
     }
+
 
     private Set<Flag> calculateAllowedFlags(List<DishIngredient> ingredients) {
         if (ingredients == null || ingredients.isEmpty()) {
@@ -159,6 +177,7 @@ public class DishService {
         dish.setFats(dto.getFats() != null ? dto.getFats() : calcFats);
         dish.setCarbs(dto.getCarbs() != null ? dto.getCarbs() : calcCarbs);
     }
+    
 
     private List<String> processPhotos(List<String> existingPhotos, MultipartFile[] newFiles) {
         List<String> finalPhotos = new ArrayList<>();

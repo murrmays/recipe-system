@@ -89,10 +89,12 @@ export class DishService {
   }
 
   countNutritionValue(ingredients: DishIngredient[], portionSize: number): NutritionValue {
+    const safePortionSize = Math.max(0, portionSize);
     const result = ingredients.reduce(
       (acc, curr) => {
-        const ratio = curr.amount / 100;
-        const portionRatio = portionSize / 100;
+        const safeAmount = Math.max(0, curr.amount);
+        const ratio = safeAmount / 100;
+        const portionRatio = safePortionSize / 100;
 
         return {
           calories: acc.calories + curr.product.calories * ratio * portionRatio,
