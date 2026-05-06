@@ -67,7 +67,7 @@
           }
         </div>
         <div class="additional-info">
-          <span>{{ dish.creationDate | date: 'dd.MM.yyyy' }}</span>
+          <span>Создан: {{ dish.creationDate | date: 'dd.MM.yyyy' }}</span>
           @if (dish.editDate) {
             <span>Обновлен: {{ dish.editDate | date: 'dd.MM.yyyy' }}</span>
           }

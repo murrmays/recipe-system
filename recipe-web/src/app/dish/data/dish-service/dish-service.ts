@@ -88,29 +88,45 @@ export class DishService {
     return this.db.deleteDish(id);
   }
 
-  countNutritionValue(ingredients: DishIngredient[], portionSize: number): NutritionValue {
-    const safePortionSize = Math.max(0, portionSize);
-    const result = ingredients.reduce(
+  countNutritionValue(ingredients: DishIngredient[]): NutritionValue {
+    // const safePortionSize = Number(portionSize) || 0;
+
+    const totals = (ingredients || []).reduce(
       (acc, curr) => {
-        const safeAmount = Math.max(0, curr.amount);
-        const ratio = safeAmount / 100;
-        const portionRatio = safePortionSize / 100;
+        const weight = Math.max(0, Number(curr.amount) || 0);
+        const prod = curr.product;
+
+        if (!prod) return acc;
+        const ratio = weight / 100;
 
         return {
-          calories: acc.calories + curr.product.calories * ratio * portionRatio,
-          proteins: acc.proteins + curr.product.proteins * ratio,
-          fats: acc.fats + curr.product.fats * ratio,
-          carbs: acc.carbs + curr.product.carbs * ratio,
+          weight: acc.weight + weight,
+          calories: acc.calories + (Number(prod.calories) || 0) * ratio,
+          proteins: acc.proteins + (Number(prod.proteins) || 0) * ratio,
+          fats: acc.fats + (Number(prod.fats) || 0) * ratio,
+          carbs: acc.carbs + (Number(prod.carbs) || 0) * ratio,
         };
       },
-      { calories: 0, proteins: 0, fats: 0, carbs: 0 },
+      { weight: 0, calories: 0, proteins: 0, fats: 0, carbs: 0 },
     );
 
+    if (totals.weight === 0) {
+      return { calories: 0, proteins: 0, fats: 0, carbs: 0 };
+    }
+    const round = (val: number) => Number(val.toFixed(1));
+    // const factor = safePortionSize / totals.weight;
+
+    // return {
+    //   calories: round(totals.calories * factor),
+    //   proteins: round(totals.proteins * factor),
+    //   fats: round(totals.fats * factor),
+    //   carbs: round(totals.carbs * factor),
+    // };
     return {
-      calories: Math.round(result.calories * 10) / 10,
-      proteins: Math.round(result.proteins * 10) / 10,
-      fats: Math.round(result.fats * 10) / 10,
-      carbs: Math.round(result.carbs * 10) / 10,
+      calories: round(totals.calories),
+      proteins: round(totals.proteins),
+      fats: round(totals.fats),
+      carbs: round(totals.carbs),
     };
   }
 }

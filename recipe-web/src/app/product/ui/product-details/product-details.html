@@ -58,7 +58,7 @@
           }
         </div>
         <div class="additional-info">
-          <span>{{ product.creationDate | date: 'dd.MM.yyyy' }}</span>
+          <span>Создан: {{ product.creationDate | date: 'dd.MM.yyyy' }}</span>
           @if (product.editDate) {
             <span>Обновлен: {{ product.editDate | date: 'dd.MM.yyyy' }}</span>
           }
