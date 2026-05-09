@@ -103,8 +103,11 @@ export class ProductPage {
           this.state.refresh();
           this.alertData.set({ msg: 'Продукт успешно удален', type: 'success' });
         },
-        error: (err) => {
-          this.alertData.set({ msg: err.message, type: 'error' });
+        error: () => {
+          this.alertData.set({
+            msg: 'Нельзя удалить продукт, поскольку он используется в создании блюда',
+            type: 'error',
+          });
         },
       });
     } else {

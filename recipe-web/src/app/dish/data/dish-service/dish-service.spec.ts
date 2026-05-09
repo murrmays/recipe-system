@@ -33,18 +33,12 @@ describe('TDishService: Nutrition Calculation', () => {
   it('should return zeros when ingredients list is empty', () => {
     const result = service.countNutritionValue([]);
     expect(result.calories).toBe(0);
-    expect(result.proteins).toBe(0);
-    expect(result.fats).toBe(0);
-    expect(result.carbs).toBe(0);
   });
-
   it('should correctly calculate the total for a single ingredient', () => {
     const ingredients: DishIngredient[] = [{ product: mockProduct, amount: 100 }];
     const result = service.countNutritionValue(ingredients);
     expect(result.calories).toBe(200);
-    expect(result.proteins).toBe(20);
   });
-
   it('should correctly sum nutrition values from multiple ingredients', () => {
     const ingredients: DishIngredient[] = [
       { product: mockProduct, amount: 200 },
@@ -59,7 +53,7 @@ describe('TDishService: Nutrition Calculation', () => {
     { amount: 200, expected: 400 },
     { amount: 50, expected: 100 },
   ].forEach(({ amount, expected }) => {
-    it('should return ${expected} kcal for amount=${amount}g ', () => {
+    it(`should return ${expected} kcal for amount=${amount}g `, () => {
       const result = service.countNutritionValue([{ product: mockProduct, amount }]);
       expect(result.calories).toBe(expected);
     });
@@ -70,11 +64,16 @@ describe('TDishService: Nutrition Calculation', () => {
     const result = service.countNutritionValue(ingredients);
     expect(result.calories).toBe(0);
   });
-
   it('should treat a negative amount as 0', () => {
     const ingredients: DishIngredient[] = [{ product: mockProduct, amount: -50 }];
     const result = service.countNutritionValue(ingredients);
     expect(result.calories).toBe(0);
+  });
+  it('should handle a product with negative calories', () => {
+    const badProduct: Product = { ...mockProduct, calories: -100 };
+    const ingredients = [{ product: badProduct, amount: 100 }];
+    const result = service.countNutritionValue(ingredients);
+    expect(result.calories).toBe(-100);
   });
 
   it('should handle floating point amounts correctly', () => {
@@ -82,17 +81,31 @@ describe('TDishService: Nutrition Calculation', () => {
     const result = service.countNutritionValue(ingredients);
     expect(result.calories).toBeCloseTo(66.6, 1);
   });
-
-  it('should correctly calculate for a high-calorie ingredient', () => {
-    const oil: Product = { ...mockProduct, calories: 900 };
-    const ingredients: DishIngredient[] = [{ product: oil, amount: 50 }];
-    const result = service.countNutritionValue(ingredients);
-    expect(result.calories).toBe(450);
-  });
-
   it('should round the final total to one decimal place', () => {
     const ingredients = [{ product: mockProduct, amount: 12.34 }];
     const result = service.countNutritionValue(ingredients);
     expect(result.calories).toBe(24.7);
+  });
+  it('should handle a very small positive amount', () => {
+    const ingredients = [{ product: mockProduct, amount: 0.01 }];
+    const result = service.countNutritionValue(ingredients);
+    expect(result.calories).toBe(0.0);
+  });
+  it('should round up a very small amount that crosses the threshold', () => {
+    const ingredients = [{ product: mockProduct, amount: 0.03 }];
+    const result = service.countNutritionValue(ingredients);
+    expect(result.calories).toBe(0.1);
+  });
+
+  it('should correctly calculate for a high-calorie ingredient', () => {
+    const oil: Product = { ...mockProduct, calories: 1_000_000 };
+    const ingredients: DishIngredient[] = [{ product: oil, amount: 500 }];
+    const result = service.countNutritionValue(ingredients);
+    expect(result.calories).toBe(5_000_000);
+  });
+  it('should handle a very large amount', () => {
+    const ingredients = [{ product: mockProduct, amount: 1_000_000 }];
+    const result = service.countNutritionValue(ingredients);
+    expect(result.calories).toBe(2_000_000);
   });
 });

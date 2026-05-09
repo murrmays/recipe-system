@@ -27,18 +27,21 @@ export class ProductCreationForm {
   close = output<void>();
   formSubmit = output<ProductDraft>();
 
-  form = this.formBuilder.nonNullable.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
-    photos: [[] as (string | File)[], [Validators.min(0), Validators.maxLength(5)]],
-    calories: [0, [Validators.required, Validators.min(0)]],
-    proteins: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
-    fats: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
-    carbs: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
-    ingredients: [''],
-    category: ['Овощи' as ProductCategory, Validators.required],
-    readiness: ['' as Readiness, Validators.required],
-    flags: [[] as Flag[]],
-  }, {validators: [NutritionSumValidator]});
+  form = this.formBuilder.nonNullable.group(
+    {
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      photos: [[] as (string | File)[], [Validators.min(0), Validators.maxLength(5)]],
+      calories: [0, [Validators.required, Validators.min(0)]],
+      proteins: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      fats: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      carbs: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      ingredients: [''],
+      category: ['Овощи' as ProductCategory, Validators.required],
+      readiness: ['' as Readiness, Validators.required],
+      flags: [[] as Flag[]],
+    },
+    { validators: [NutritionSumValidator] },
+  );
 
   constructor() {
     effect(() => {
@@ -91,29 +94,36 @@ export class ProductCreationForm {
     const files: FileList = event.target.files || event.dataTransfer?.files;
     if (!files) return;
 
-    const currFiles = this.form.controls.photos.value;
+    const currFiles = this.form.controls.photos.value || [];
     const newFiles = [...currFiles];
 
     for (let i = 0; i < files.length; i++) {
       if (newFiles.length < 5) {
-        const file = files[i];
-        const preview = URL.createObjectURL(file);
+        const file = files[i] as any;
+        file.preview = URL.createObjectURL(file);
 
-        this.photoPreviews.push(preview);
         newFiles.push(file);
       }
     }
+
     this.form.controls.photos.setValue(newFiles);
   }
+
   getPhotoPreview(photo: any): string {
+    if (!photo) return '';
     if (typeof photo === 'string') {
       return photo.startsWith('http') ? photo : `http://localhost:8080${photo}`;
     }
-    return photo.preview || photo;
+    if (photo.preview) {
+      return photo.preview;
+    }
+
+    return '';
   }
+
   removePhoto(index: number) {
     const photos = this.form.controls.photos.value;
-    
+
     if (typeof photos[index] === 'string' && photos[index].startsWith('blob:')) {
       URL.revokeObjectURL(photos[index]);
     }
