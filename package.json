@@ -1,0 +1,22 @@
+{
+  "name": "recipe-book",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.8.0"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/murrmays/recipe-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/murrmays/recipe-system/issues"
+  },
+  "homepage": "https://github.com/murrmays/recipe-system#readme",
+  "description": ""
+}
